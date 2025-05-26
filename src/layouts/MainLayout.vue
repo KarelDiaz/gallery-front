@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <!-- aqui van las categorias -->
+        <q-btn flat to="slug" label="Nombre de la categoria aqui" />
       </q-toolbar>
     </q-header>
     <q-page-container class="page-container">
@@ -12,7 +13,6 @@
 </template>
 
 <script setup>
-
 </script>
 
 <style scoped>
