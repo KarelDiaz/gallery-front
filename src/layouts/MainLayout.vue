@@ -23,14 +23,8 @@ onMounted(async () => {
           <div
             class="main-layout__categories-item"
             v-for="category in categories"
-            :key="category.id"
-          >
-            <q-btn
-              flat
-              :to="category.attributes.slug"
-              :label="category.attributes.name"
-              class="main-layout__categories-btn"
-            />
+            :key="category.id">
+            {{ category.attributes.name }}
           </div>
         </div>
       </q-toolbar>
@@ -52,6 +46,28 @@ onMounted(async () => {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   width: 100%;
+  color: black;
+}
+</style>
+
+<style lang="scss">
+.q-header {
+  background: none !important;
+  box-shadow: none !important;
+  height: 90px;
+  padding-bottom: 20px;
+
+  .q-layout__shadow {
+    display: none !important;
+  }
+
+  .q-toolbar {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
 }
 </style>
