@@ -15,9 +15,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="main-bgs__pcts">
-    <div class="main-bgs__pcts-1" v-for="picture in pictures" :key="picture.id">
-      <div class="main-bgs__black"></div>
+  <div class="main-bgs__container">
+    <div class="main-bgs__black"></div>
+
+    <div v-for="picture in pictures" :key="picture.id" class="main-bgs__pcts-1">
       <img
         class="main-bgs__image"
         :src="'https://galleryboard.kareldiaz.com' + picture.attributes.picture.data.attributes.url"
@@ -26,10 +27,12 @@ onMounted(async () => {
         :description="picture.attributes.caption"
       />
     </div>
-    <div class="main-bgs-titles">
-      <div class="main-bgs__titles-h1">GALLERY</div>
+
+    <div class="main-bgs__titles">
+      <div class="main-bgs__titles-h1">Gallery</div>
       <div class="main-bgs__titles-h2">Karel Díaz</div>
     </div>
+
     <div class="main-bgs__box">
       <div class="main-bgs__box-1"></div>
       <div class="main-bgs__box-2"></div>
@@ -40,8 +43,11 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Uncial+Antiqua&display=swap');
+
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 .main-bgs__black {
@@ -66,16 +72,34 @@ body {
 }
 
 .main-bgs__titles {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  text-align: center;
+
   &-h1 {
+    font-family: 'Alex Brush', cursive;
+    font-size: 96px;
+    font-weight: normal;
+    color: #ffffff;
   }
 
   &-h2 {
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.3em;
   }
 }
 
 .main-bgs__box {
   position: relative;
-
   &-1,
   &-2,
   &-3,
