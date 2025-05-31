@@ -37,6 +37,8 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Uncial+Antiqua&display=swap');
+
 .page-container {
   height: 100dvh;
   width: 100%;
@@ -46,10 +48,11 @@ onMounted(async () => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  color: black;
+  justify-content: space-evenly;
+  width: 100vw;
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Alex Brush', cursive;
 }
 </style>
 
@@ -59,7 +62,7 @@ onMounted(async () => {
   z-index: 20;
   background: none !important;
   box-shadow: none !important;
-  height: 90px;
+  height: 100px;
   padding-bottom: 20px;
 
   .q-layout__shadow {
