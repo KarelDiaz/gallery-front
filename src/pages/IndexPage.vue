@@ -2,44 +2,61 @@
 import { ref, onMounted } from 'vue'
 import { api } from 'src/boot/axios'
 
+const url = import.meta.env.VITE_URL
 const pictures = ref([])
+const pictureActive = ref(null)
 
 onMounted(async () => {
   try {
     const data = await api.get('/index-backgrounds?populate=*')
     pictures.value = data.data.data
+    if (pictures.value.length > 0) {
+      pictureActive.value = 0
+    }
   } catch {
     alert('No ha cargado la imagen bgs')
   }
+
+  setInterval(() => {
+    if (pictures.value.length > 0) {
+      pictureActive.value = (pictureActive.value + 1) % pictures.value.length
+    }
+  }, 3000)
 })
 </script>
 
 <template>
-  <div class="main-bgs__container">
-    <div class="main-bgs__black"></div>
+  <div class="main">
+    <div class="main-bgs__container">
+      <div class="main-bgs__black"></div>
 
-    <div v-for="picture in pictures" :key="picture.id" class="main-bgs__pcts-1">
       <img
         class="main-bgs__image"
-        :src="'https://galleryboard.kareldiaz.com' + picture.attributes.picture.data.attributes.url"
+        :class="{ 'active': pictureActive === index }"
+        v-for="(picture, index) in pictures" :key="picture.id"
+        :src="url + picture.attributes.picture.data.attributes.url"
         :alt="picture.attributes.picture.data.attributes.name"
         :name="picture.attributes.name"
-        :description="picture.attributes.caption"
-      />
+        :description="picture.attributes.caption" />
+
+      <div class="main-bgs__titles">
+        <div class="main-bgs__titles-h1">Gallery</div>
+        <div class="main-bgs__titles-h2">Karel Díaz</div>
+      </div>
+
+      <div class="main-bgs__box">
+        <div class="main-bgs__box-1"></div>
+        <div class="main-bgs__box-2"></div>
+        <div class="main-bgs__box-3"></div>
+        <div class="main-bgs__box-4"></div>
+      </div>
     </div>
 
-    <div class="main-bgs__titles">
-      <div class="main-bgs__titles-h1">Gallery</div>
-      <div class="main-bgs__titles-h2">Karel Díaz</div>
-    </div>
-
-    <div class="main-bgs__box">
-      <div class="main-bgs__box-1"></div>
-      <div class="main-bgs__box-2"></div>
-      <div class="main-bgs__box-3"></div>
-      <div class="main-bgs__box-4"></div>
+    <div class="main-album__container">
+      <!-- aqui va la lista de items -->
     </div>
   </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -50,8 +67,15 @@ body {
   overflow: hidden;
 }
 
+.main-bgs__container {
+  position: relative;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .main-bgs__black {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -62,17 +86,23 @@ body {
 }
 
 .main-bgs__image {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   object-fit: cover;
   z-index: -1;
+  opacity: 0;
+  transition: opacity 1s;
+
+  &.active {
+    opacity: 1;
+  }
 }
 
 .main-bgs__titles {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -99,12 +129,12 @@ body {
 }
 
 .main-bgs__box {
-  position: relative;
+
   &-1,
   &-2,
   &-3,
   &-4 {
-    position: fixed;
+    position: absolute;
     width: 30px;
     height: 30px;
     box-sizing: border-box;

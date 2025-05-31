@@ -23,8 +23,7 @@ onMounted(async () => {
           <div
             class="main-layout__categories-item"
             v-for="category in categories"
-            :key="category.id"
-          >
+            :key="category.id">
             {{ category.attributes.name }}
           </div>
         </div>
@@ -57,8 +56,12 @@ onMounted(async () => {
 </style>
 
 <style lang="scss">
+.q-page-container {
+  padding: 0 !important;
+}
+
 .q-header {
-  position: absolute;
+  position: fixed;
   z-index: 20;
   background: none !important;
   box-shadow: none !important;
