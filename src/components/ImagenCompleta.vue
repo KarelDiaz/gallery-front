@@ -2,6 +2,9 @@
   <div>
     <div class="imagen-completa" @click="handlerShowFullscreen()">
       <div class="img-container">
+        <div class="box-wrapper">
+          <BoxItems :space="-3"></BoxItems>
+        </div>
         <img :src="imagen" class="img" :alt="nombre" />
       </div>
       <div class="name">{{ nombre }}</div>
@@ -21,7 +24,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import ImagenFullscreen from './ImagenFullScreen.vue'
+import ImagenFullscreen from 'components/ImagenFullscreen.vue'
+import BoxItems from 'components/BoxItems.vue'
 
 const showFullscreen = ref(false)
 
@@ -49,53 +53,39 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Uncial+Antiqua&display=swap');
+
 .imagen-completa {
+  font-family: Arial, sans-serif;
+  background-color: #101010;
+  padding: 40px 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  border: 1px solid #000;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: 0.4s ease-in-out;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 
   .img-container {
-    width: 70%;
-    height: 300px;
-    overflow: hidden;
-    border-radius: 8px;
     position: relative;
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
-
+    margin-bottom: 20px;
     .img {
-      max-width: 100%;
       height: auto;
-      border-radius: 8px;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease-in-out;
     }
   }
 
   .name {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 16px;
     margin-top: 10px;
-    color: #333;
+    color: #ffffff;
+    margin-bottom: 5px;
+    align-items: start;
   }
 
   .description {
-    font-size: 1rem;
-    margin-top: 5px;
-    color: #666;
+    font-family: 'Alex Brush', cursive;
+    font-size: 16px;
+    color: #ffffff;
   }
 }
 </style>

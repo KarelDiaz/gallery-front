@@ -1,20 +1,28 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { api } from 'src/boot/axios'
+import BoxItems from 'components/BoxItems.vue'
+
+import ImagenCompleta from 'components/ImagenCompleta.vue'
 
 const url = import.meta.env.VITE_URL
 const pictures = ref([])
+const paisajes = ref([])
 const pictureActive = ref(null)
 
 onMounted(async () => {
   try {
     const data = await api.get('/index-backgrounds?populate=*')
+    const c = await api.get('/items?populate=*')
+
     pictures.value = data.data.data
+    paisajes.value = c.data.data
+
     if (pictures.value.length > 0) {
       pictureActive.value = 0
     }
   } catch {
-    alert('No ha cargado la imagen bgs')
+    alert('Error cargando imágenes o paisajes')
   }
 
   setInterval(() => {
@@ -32,46 +40,53 @@ onMounted(async () => {
 
       <img
         class="main-bgs__image"
-        :class="{ 'active': pictureActive === index }"
-        v-for="(picture, index) in pictures" :key="picture.id"
+        :class="{ active: pictureActive === index }"
+        v-for="(picture, index) in pictures"
+        :key="picture.id"
         :src="url + picture.attributes.picture.data.attributes.url"
         :alt="picture.attributes.picture.data.attributes.name"
-        :name="picture.attributes.name"
-        :description="picture.attributes.caption" />
+      />
 
       <div class="main-bgs__titles">
         <div class="main-bgs__titles-h1">Gallery</div>
         <div class="main-bgs__titles-h2">Karel Díaz</div>
       </div>
 
-      <div class="main-bgs__box">
-        <div class="main-bgs__box-1"></div>
-        <div class="main-bgs__box-2"></div>
-        <div class="main-bgs__box-3"></div>
-        <div class="main-bgs__box-4"></div>
-      </div>
+      <BoxItems></BoxItems>
     </div>
 
     <div class="main-album__container">
-      <!-- aqui va la lista de items -->
+      <div class="main-album__list">
+        <ImagenCompleta
+          v-for="(paisaje, index) in paisajes"
+          :key="`p-${index}`"
+          :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
+          :nombre="paisaje.attributes.name"
+          :descripcion="paisaje.attributes.decription"
+          @clickcustom="clickCustom"
+        />
+      </div>
     </div>
   </div>
-
 </template>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Uncial+Antiqua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Uncial+Antiqua&display=swap');
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
 }
 
 .main-bgs__container {
   position: relative;
-  height: 100dvh;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  height: 100vh;
+  overflow: hidden;
 }
 
 .main-bgs__black {
@@ -116,58 +131,22 @@ body {
   &-h1 {
     font-family: 'Alex Brush', cursive;
     font-size: 96px;
-    font-weight: normal;
     color: #ffffff;
+    margin: 0;
   }
 
   &-h2 {
     font-family: 'Uncial Antiqua', cursive;
     font-size: 24px;
     color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.3em;
+    letter-spacing: 0.2em;
+    margin-top: -0.5em;
   }
 }
 
-.main-bgs__box {
-
-  &-1,
-  &-2,
-  &-3,
-  &-4 {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 5px;
-    color: #fff;
-  }
-
-  &-1 {
-    top: 20px;
-    left: 20px;
-    border-top: 1px solid #fff;
-    border-left: 1px solid #fff;
-  }
-
-  &-2 {
-    top: 20px;
-    right: 20px;
-    border-top: 1px solid #fff;
-    border-right: 1px solid #fff;
-  }
-
-  &-3 {
-    bottom: 20px;
-    left: 20px;
-    border-bottom: 1px solid #fff;
-    border-left: 1px solid #fff;
-  }
-
-  &-4 {
-    bottom: 20px;
-    right: 20px;
-    border-bottom: 1px solid #fff;
-    border-right: 1px solid #fff;
-  }
+.main-album__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #101010;
 }
 </style>

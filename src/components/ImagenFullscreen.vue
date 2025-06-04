@@ -1,6 +1,6 @@
 <!-- ImagenFullscreen.vue -->
 <template>
-  <div class="fullscreen-background" @click.self="close">
+  <div class="fullscreen-background" @click.self="close" @keypress="escape">
     <div class="fullscreen-content">
       <!-- Información a un costado -->
       <div class="fullscreen-text">
@@ -22,6 +22,13 @@ const emit = defineEmits(['close'])
 
 const close = () => {
   emit('close')
+}
+const escape = (event) => {
+  console.log(event)
+
+  if (event.key === 'Escape') {
+    close()
+  }
 }
 
 defineProps({
