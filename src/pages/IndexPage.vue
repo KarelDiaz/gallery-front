@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { api } from 'src/boot/axios'
 import BoxItems from 'components/BoxItems.vue'
 
@@ -9,6 +9,14 @@ const url = import.meta.env.VITE_URL
 const pictures = ref([])
 const paisajes = ref([])
 const pictureActive = ref(null)
+
+const paisajes1 = computed(() => {
+  return paisajes.value.slice(0, Math.floor(paisajes.value.length / 2))
+})
+
+const paisajes2 = computed(() => {
+  return paisajes.value.slice(Math.floor(paisajes.value.length / 2), paisajes.value.length)
+})
 
 onMounted(async () => {
   try {
@@ -58,7 +66,18 @@ onMounted(async () => {
     <div class="main-album__container">
       <div class="main-album__list">
         <ImagenCompleta
-          v-for="(paisaje, index) in paisajes"
+          v-for="(paisaje, index) in paisajes1"
+          :key="`p-${index}`"
+          :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
+          :nombre="paisaje.attributes.name"
+          :descripcion="paisaje.attributes.decription"
+          @clickcustom="clickCustom"
+        />
+      </div>
+
+      <div class="main-album__list">
+        <ImagenCompleta
+          v-for="(paisaje, index) in paisajes2"
           :key="`p-${index}`"
           :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
           :nombre="paisaje.attributes.name"
@@ -144,9 +163,14 @@ body {
   }
 }
 
-.main-album__list {
+.main-album__container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: #101010;
+}
+
+.main-album__list {
+  display: flex;
+  flex-direction: column;
 }
 </style>

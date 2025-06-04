@@ -8,12 +8,10 @@ defineProps({
 </script>
 
 <template>
-  <div class="main-bgs__box">
-    <div class="main-bgs__box-1" :style="{ top: `${space}px`, left: `${space}px` }"></div>
-    <div class="main-bgs__box-2" :style="{ top: `${space}px`, right: `${space}px` }"></div>
-    <div class="main-bgs__box-3" :style="{ bottom: `${space}px`, left: `${space}px` }"></div>
-    <div class="main-bgs__box-4" :style="{ bottom: `${space}px`, right: `${space}px` }"></div>
-  </div>
+  <div class="main-bgs__box-1" :style="{ top: `${space}px`, left: `${space}px` }"></div>
+  <div class="main-bgs__box-2" :style="{ top: `${space}px`, right: `${space}px` }"></div>
+  <div class="main-bgs__box-3" :style="{ bottom: `${space}px`, left: `${space}px` }"></div>
+  <div class="main-bgs__box-4" :style="{ bottom: `${space}px`, right: `${space}px` }"></div>
 </template>
 
 <style scoped lang="scss">
@@ -25,10 +23,7 @@ defineProps({
     position: absolute;
     width: 30px;
     height: 30px;
-    color: #fff;
-    box-sizing: border-box;
-    padding: 5px;
-    transition: transform 0.4s ease;
+    transition: 0.4s ease;
   }
 
   &-1 {

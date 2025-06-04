@@ -3,6 +3,12 @@ import { ref, onMounted } from 'vue'
 import { api } from 'src/boot/axios'
 
 const categories = ref([])
+const pagescroll = ref(false)
+
+const scroll = (e) => {
+  if (e.position > 0) pagescroll.value = true
+  else pagescroll.value = false
+}
 
 onMounted(async () => {
   try {
@@ -15,15 +21,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lHh Lpr lFf" @scroll="scroll">
+    <q-header elevated :class="{ onscroll: pagescroll }">
       <q-toolbar>
         <!-- aqui van las categorias -->
         <div class="main-layout__categories">
           <div
             class="main-layout__categories-item"
             v-for="category in categories"
-            :key="category.id">
+            :key="category.id"
+          >
             {{ category.attributes.name }}
           </div>
         </div>
@@ -52,6 +59,7 @@ onMounted(async () => {
   color: #ffffff;
   font-size: 20px;
   font-family: 'Alex Brush', cursive;
+  height: 100%;
 }
 </style>
 
@@ -66,7 +74,14 @@ onMounted(async () => {
   background: none !important;
   box-shadow: none !important;
   height: 100px;
-  padding-bottom: 20px;
+  transition: 0.2s;
+
+  &.onscroll {
+    height: 60px;
+    background: rgba(0, 0, 0, 0.205) !important;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  }
 
   .q-layout__shadow {
     display: none !important;
@@ -74,6 +89,7 @@ onMounted(async () => {
 
   .q-toolbar {
     height: 100%;
+    min-height: 0;
     display: flex;
     align-items: flex-end;
     justify-content: center;

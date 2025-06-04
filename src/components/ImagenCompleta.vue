@@ -1,10 +1,8 @@
 <template>
-  <div>
+  <div @mouseenter="space = -20" @mouseleave="space = -5">
     <div class="imagen-completa" @click="handlerShowFullscreen()">
       <div class="img-container">
-        <div class="box-wrapper">
-          <BoxItems :space="-3"></BoxItems>
-        </div>
+        <BoxItems :space="space"></BoxItems>
         <img :src="imagen" class="img" :alt="nombre" />
       </div>
       <div class="name">{{ nombre }}</div>
@@ -28,6 +26,7 @@ import ImagenFullscreen from 'components/ImagenFullscreen.vue'
 import BoxItems from 'components/BoxItems.vue'
 
 const showFullscreen = ref(false)
+const space = ref(-5)
 
 const emit = defineEmits(['clickcustom'])
 
@@ -61,15 +60,15 @@ defineProps({
   padding: 40px 30px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
   .img-container {
+    line-height: 0;
+    font-size: 0;
     position: relative;
-    margin-bottom: 20px;
+
     .img {
-      height: auto;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
   }
 
@@ -80,6 +79,7 @@ defineProps({
     color: #ffffff;
     margin-bottom: 5px;
     align-items: start;
+    margin-top: 20px;
   }
 
   .description {
