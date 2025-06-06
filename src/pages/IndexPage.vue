@@ -52,8 +52,7 @@ onMounted(async () => {
         v-for="(picture, index) in pictures"
         :key="picture.id"
         :src="url + picture.attributes.picture.data.attributes.url"
-        :alt="picture.attributes.picture.data.attributes.name"
-      />
+        :alt="picture.attributes.picture.data.attributes.name" />
 
       <div class="main-bgs__titles">
         <div class="main-bgs__titles-h1">Gallery</div>
@@ -71,8 +70,7 @@ onMounted(async () => {
           :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
           :nombre="paisaje.attributes.name"
           :descripcion="paisaje.attributes.decription"
-          @clickcustom="clickCustom"
-        />
+          @clickcustom="clickCustom" />
       </div>
 
       <div class="main-album__list">
@@ -82,8 +80,7 @@ onMounted(async () => {
           :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
           :nombre="paisaje.attributes.name"
           :descripcion="paisaje.attributes.decription"
-          @clickcustom="clickCustom"
-        />
+          @clickcustom="clickCustom" />
       </div>
     </div>
   </div>

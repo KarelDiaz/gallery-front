@@ -1,5 +1,5 @@
 <template>
-  <div @mouseenter="space = -20" @mouseleave="space = -5">
+  <div @mouseenter="space = -12" @mouseleave="space = -5">
     <div class="imagen-completa" @click="handlerShowFullscreen()">
       <div class="img-container">
         <BoxItems :space="space"></BoxItems>
@@ -14,8 +14,7 @@
         :imagen="imagen"
         :nombre="nombre"
         :descripcion="descripcion"
-        @close="showFullscreen = false"
-      />
+        @close="showFullscreen = false" />
     </transition>
   </div>
 </template>
