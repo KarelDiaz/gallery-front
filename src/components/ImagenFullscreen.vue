@@ -4,58 +4,79 @@
     <div class="fullscreen-content">
       <!-- Información a un costado -->
       <div class="fullscreen-text">
-        <h2>{{ nombre }}</h2>
-        <p>{{ descripcion }}</p>
+        <h2>{{ currentPicture.attributes.name }}</h2>
+        <p>{{ currentPicture.attributes.decription }}</p>
       </div>
 
       <!-- Imagen grande -->
-      <img :src="imagen" :alt="nombre" class="fullscreen-image" />
+      <img :src="url + currentPicture.attributes.picture.data.attributes.url" :alt="currentPicture.attributes.nombre"
+        class="fullscreen-image" />
 
       <!-- Botón cerrar -->
       <button class="close-button" @click="close"><q-icon name="close" /></button>
     </div>
+
+    <button class="action next" @click="next()">
+      <q-icon name="chevron_right" size="50px" color="white" />
+    </button>
+
+    <button class="action prev" @click="previous()">
+      <q-icon name="chevron_left" size="50px" color="white" />
+    </button>
   </div>
 </template>
 
 <script setup>
-const emit = defineEmits(['close'])
+import { storeToRefs } from 'pinia'
+
+import { usePicturesStore } from 'src/stores/pictures'
+
+const url = import.meta.env.VITE_URL
+const picturesStore = usePicturesStore()
+const { currentPicture, pictureIndex, pictures } = storeToRefs(picturesStore)
+
+const next = () => {
+  if (pictureIndex.value === null) return
+  if (pictureIndex.value === pictures.value.length - 1) {
+    pictureIndex.value = 0
+  } else {
+    pictureIndex.value++
+  }
+}
+
+const previous = () => {
+  if (pictureIndex.value === null) return
+  if (pictureIndex.value === 0) {
+    pictureIndex.value = pictures.value.length - 1
+  } else {
+    pictureIndex.value--
+  }
+}
 
 const close = () => {
-  emit('close')
+  pictureIndex.value = null
 }
-const escape = (event) => {
-  console.log(event)
 
+const escape = (event) => {
   if (event.key === 'Escape') {
     close()
   }
 }
-
-defineProps({
-  imagen: {
-    type: String,
-    required: true,
-  },
-  nombre: {
-    type: String,
-    required: true,
-  },
-  descripcion: {
-    type: String,
-    required: true,
-  },
-})
 </script>
 
 <style scoped lang="scss">
+@import 'src/css/mixins';
+
 .fullscreen-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Fondo translúcido */
-  backdrop-filter: blur(20px); /* Desenfoque de fondo */
+  background: rgba(0, 0, 0, 0.7);
+  /* Fondo translúcido */
+  backdrop-filter: blur(20px);
+  /* Desenfoque de fondo */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,6 +86,7 @@ defineProps({
 .fullscreen-content {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 20px;
   padding: 10px;
@@ -74,6 +96,10 @@ defineProps({
   overflow-y: auto;
   transition: opacity 0.6s;
   opacity: 2;
+
+  @include r(lg) {
+    flex-direction: row;
+  }
 }
 
 .fullscreen-image {
@@ -101,6 +127,29 @@ defineProps({
   font-size: 14px;
 }
 
+.action {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 20px;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  &.next {
+    right: 0;
+  }
+
+  &.prev {
+    left: 0;
+  }
+}
+
 /* Botón de cerrar */
 .close-button {
   position: absolute;
@@ -111,6 +160,8 @@ defineProps({
   font-size: 20px;
   cursor: pointer;
   color: #dfd2d2;
+  z-index: 100;
+
   &:hover {
     background: #8b8a8a;
     color: #000;

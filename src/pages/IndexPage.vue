@@ -1,41 +1,45 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { api } from 'src/boot/axios'
-import BoxItems from 'components/BoxItems.vue'
+import { ref, onMounted, computed } from 'vue'
 
+
+import { usePicturesStore } from 'src/stores/pictures'
+
+
+import BoxItems from 'components/BoxItems.vue'
 import ImagenCompleta from 'components/ImagenCompleta.vue'
 
 const url = import.meta.env.VITE_URL
-const pictures = ref([])
-const paisajes = ref([])
-const pictureActive = ref(null)
+const backgrounds = ref([])
+const backgroundsActive = ref(null)
+const picturesStore = usePicturesStore()
+const { pictures } = storeToRefs(picturesStore)
 
-const paisajes1 = computed(() => {
-  return paisajes.value.slice(0, Math.floor(paisajes.value.length / 2))
+const pictures1 = computed(() => {
+  return pictures.value.slice(0, Math.floor(pictures.value.length / 2))
 })
 
-const paisajes2 = computed(() => {
-  return paisajes.value.slice(Math.floor(paisajes.value.length / 2), paisajes.value.length)
+const pictures2 = computed(() => {
+  return pictures.value.slice(Math.floor(pictures.value.length / 2), pictures.value.length)
 })
 
 onMounted(async () => {
   try {
     const data = await api.get('/index-backgrounds?populate=*')
-    const c = await api.get('/items?populate=*')
 
-    pictures.value = data.data.data
-    paisajes.value = c.data.data
+    backgrounds.value = data.data.data
 
-    if (pictures.value.length > 0) {
-      pictureActive.value = 0
+    if (backgrounds.value.length > 0) {
+      backgroundsActive.value = 0
     }
   } catch {
-    alert('Error cargando imágenes o paisajes')
+    alert('Error cargando imágenes o pictures')
   }
 
   setInterval(() => {
-    if (pictures.value.length > 0) {
-      pictureActive.value = (pictureActive.value + 1) % pictures.value.length
+    if (backgrounds.value.length > 0) {
+      backgroundsActive.value = (backgroundsActive.value + 1) % backgrounds.value.length
     }
   }, 3000)
 })
@@ -48,11 +52,11 @@ onMounted(async () => {
 
       <img
         class="main-bgs__image"
-        :class="{ active: pictureActive === index }"
-        v-for="(picture, index) in pictures"
-        :key="picture.id"
-        :src="url + picture.attributes.picture.data.attributes.url"
-        :alt="picture.attributes.picture.data.attributes.name" />
+        :class="{ active: backgroundsActive === index }"
+        v-for="(background, index) in backgrounds"
+        :key="background.id"
+        :src="url + background.attributes.picture.data.attributes.url"
+        :alt="background.attributes.picture.data.attributes.name" />
 
       <div class="main-bgs__titles">
         <div class="main-bgs__titles-h1">Gallery</div>
@@ -65,22 +69,22 @@ onMounted(async () => {
     <div class="main-album__container">
       <div class="main-album__list">
         <ImagenCompleta
-          v-for="(paisaje, index) in paisajes1"
+          v-for="(picture1, index) in pictures1"
           :key="`p-${index}`"
-          :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
-          :nombre="paisaje.attributes.name"
-          :descripcion="paisaje.attributes.decription"
-          @clickcustom="clickCustom" />
+          :index="pictures.indexOf(picture1)"
+          :imagen="url + picture1.attributes.picture.data.attributes.formats.large.url"
+          :nombre="picture1.attributes.name"
+          :descripcion="picture1.attributes.decription" />
       </div>
 
       <div class="main-album__list">
         <ImagenCompleta
-          v-for="(paisaje, index) in paisajes2"
+          v-for="(picture2, index) in pictures2"
           :key="`p-${index}`"
-          :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
-          :nombre="paisaje.attributes.name"
-          :descripcion="paisaje.attributes.decription"
-          @clickcustom="clickCustom" />
+          :index="pictures.indexOf(picture2)"
+          :imagen="url + picture2.attributes.picture.data.attributes.formats.large.url"
+          :nombre="picture2.attributes.name"
+          :descripcion="picture2.attributes.decription" />
       </div>
     </div>
   </div>

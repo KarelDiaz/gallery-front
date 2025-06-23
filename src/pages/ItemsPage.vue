@@ -8,10 +8,10 @@
       <ImagenCompleta
         v-for="(paisaje, index) in paisajes"
         :key="`p-${index}`"
+        :id="paisaje.id"
         :imagen="url + paisaje.attributes.picture.data.attributes.formats.large.url"
         :nombre="paisaje.attributes.name"
-        :descripcion="paisaje.attributes.description"
-        @clickcustom="clickCustom" />
+        :descripcion="paisaje.attributes.description" />
     </div>
 
     <div class="modalpaisaje">

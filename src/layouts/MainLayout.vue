@@ -1,9 +1,19 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+
+
 import { api } from 'src/boot/axios'
+import { usePicturesStore } from 'src/stores/pictures'
+
+
+import ImagenFullscreen from 'components/ImagenFullscreen.vue'
+import { storeToRefs } from 'pinia'
+
 
 const categories = ref([])
 const pagescroll = ref(false)
+const picturesStore = usePicturesStore()
+const { pictureIndex } = storeToRefs(picturesStore)
 
 const scroll = (e) => {
   if (e.position > 0) pagescroll.value = true
@@ -11,6 +21,7 @@ const scroll = (e) => {
 }
 
 onMounted(async () => {
+  picturesStore.getPictures()
   try {
     const c = await api.get('/categories?populate=*')
     categories.value = c.data.data
@@ -29,8 +40,7 @@ onMounted(async () => {
           <div
             class="main-layout__categories-item"
             v-for="category in categories"
-            :key="category.id"
-          >
+            :key="category.id">
             {{ category.attributes.name }}
           </div>
         </div>
@@ -39,6 +49,10 @@ onMounted(async () => {
     <q-page-container class="page-container">
       <router-view />
     </q-page-container>
+
+    <transition name="fade">
+      <ImagenFullscreen v-if="pictureIndex != null" />
+    </transition>
   </q-layout>
 </template>
 
