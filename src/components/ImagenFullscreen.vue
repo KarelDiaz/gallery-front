@@ -1,31 +1,3 @@
-<!-- ImagenFullscreen.vue -->
-<template>
-  <div class="fullscreen-background" @click.self="close" @keypress="escape">
-    <div class="fullscreen-content">
-      <!-- Información a un costado -->
-      <div class="fullscreen-text">
-        <h2>{{ currentPicture.attributes.name }}</h2>
-        <p>{{ currentPicture.attributes.decription }}</p>
-      </div>
-
-      <!-- Imagen grande -->
-      <img :src="url + currentPicture.attributes.picture.data.attributes.url" :alt="currentPicture.attributes.nombre"
-        class="fullscreen-image" />
-
-      <!-- Botón cerrar -->
-      <button class="close-button" @click="close"><q-icon name="close" /></button>
-    </div>
-
-    <button class="action next" @click="next()">
-      <q-icon name="chevron_right" size="50px" color="white" />
-    </button>
-
-    <button class="action prev" @click="previous()">
-      <q-icon name="chevron_left" size="50px" color="white" />
-    </button>
-  </div>
-</template>
-
 <script setup>
 import { storeToRefs } from 'pinia'
 
@@ -63,6 +35,37 @@ const escape = (event) => {
   }
 }
 </script>
+
+<!-- ImagenFullscreen.vue -->
+<template>
+  <div class="fullscreen-background" @click.self="close" @keypress="escape">
+    <div class="fullscreen-content">
+      <!-- Información a un costado -->
+      <div class="fullscreen-text">
+        <h2>{{ currentPicture.attributes.name }}</h2>
+        <p>{{ currentPicture.attributes.decription }}</p>
+      </div>
+
+      <!-- Imagen grande -->
+      <img
+        :src="url + currentPicture.attributes.picture.data.attributes.url"
+        :alt="currentPicture.attributes.nombre"
+        class="fullscreen-image"
+      />
+
+      <!-- Botón cerrar -->
+      <button class="close-button" @click="close"><q-icon name="close" /></button>
+    </div>
+
+    <button class="action next" @click="next()">
+      <q-icon name="chevron_right" size="50px" color="white" />
+    </button>
+
+    <button class="action prev" @click="previous()">
+      <q-icon name="chevron_left" size="50px" color="white" />
+    </button>
+  </div>
+</template>
 
 <style scoped lang="scss">
 @import 'src/css/mixins';
@@ -102,13 +105,16 @@ const escape = (event) => {
   }
 }
 
+/* Imagen Principal */
 .fullscreen-image {
   max-width: 100%;
   max-height: 100vh;
   object-fit: contain;
   border-radius: 8px;
+  width: 50vw;
 }
 
+/* Información Costado */
 .fullscreen-text {
   display: flex;
   flex-direction: column;
@@ -127,18 +133,31 @@ const escape = (event) => {
   font-size: 14px;
 }
 
+// /* Flechas y su acción */
 .action {
   position: absolute;
   top: 0;
+  bottom: 0;
   height: 100%;
   border: none;
   background: transparent;
-  padding: 20px;
+  padding: 0;
   cursor: pointer;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5%;
+  transition: 1s;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.7);
+    background: linear-gradient(
+      to bottom,
+      rgba(116, 116, 116, 0),
+      rgba(0, 0, 0, 0.8),
+      rgba(116, 116, 116, 0)
+    );
+    transition: 0.8s;
   }
 
   &.next {
@@ -153,18 +172,21 @@ const escape = (event) => {
 /* Botón de cerrar */
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 30px;
+  right: 100px;
   background: transparent;
   border: none;
+  border-radius: 1000px;
   font-size: 20px;
   cursor: pointer;
   color: #dfd2d2;
   z-index: 100;
+  transition: 0.5s;
 
   &:hover {
-    background: #8b8a8a;
+    background: #dfd2d2;
     color: #000;
+    transition: 0.8s;
   }
 }
 </style>
