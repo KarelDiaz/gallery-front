@@ -50,8 +50,7 @@ const escape = (event) => {
       <img
         :src="url + currentPicture.attributes.picture.data.attributes.url"
         :alt="currentPicture.attributes.nombre"
-        class="fullscreen-image"
-      />
+        class="fullscreen-image" />
 
       <!-- Botón cerrar -->
       <button class="close-button" @click="close"><q-icon name="close" /></button>
@@ -148,16 +147,26 @@ const escape = (event) => {
   align-items: center;
   justify-content: center;
   width: 5%;
-  transition: 1s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(116, 116, 116, 0),
+        rgba(0, 0, 0, 0.8),
+        rgba(116, 116, 116, 0));
+    opacity: 0;
+    transition: 0.3s;
+  }
 
   &:hover {
-    background: linear-gradient(
-      to bottom,
-      rgba(116, 116, 116, 0),
-      rgba(0, 0, 0, 0.8),
-      rgba(116, 116, 116, 0)
-    );
-    transition: 0.8s;
+    &::before {
+      opacity: 1;
+    }
   }
 
   &.next {
