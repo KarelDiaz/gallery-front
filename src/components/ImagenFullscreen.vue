@@ -48,9 +48,10 @@ const escape = (event) => {
 
       <!-- Imagen grande -->
       <img
-        :src="url + currentPicture.attributes.picture.data.attributes.url"
+        :src="url + currentPicture.attributes.picture.data.attributes.formats.large.url"
         :alt="currentPicture.attributes.nombre"
-        class="fullscreen-image" />
+        class="fullscreen-image"
+      />
 
       <!-- Botón cerrar -->
       <button class="close-button" @click="close"><q-icon name="close" /></button>
@@ -105,12 +106,33 @@ const escape = (event) => {
 }
 
 /* Imagen Principal */
+// .fullscreen-image {
+//   max-width: 100%;
+//   max-height: 100vh;
+//   object-fit: contain;
+//   border-radius: 8px;
+//   width: 50vw;
+//   @include r(sm) {
+
+//   }
+// }
+
+/* Imagen Principal */
 .fullscreen-image {
   max-width: 100%;
-  max-height: 100vh;
+  max-height: calc(100vh - 210px);
   object-fit: contain;
   border-radius: 8px;
-  width: 50vw;
+  width: 90vw; /* Más ancho en móvil */
+  display: block;
+  margin: 0 auto; /* ✅ Esto la centra en móvil */
+
+  @include r(lg) {
+    width: 50vw; /* ✅ Más pequeño en pantallas grandes */
+    margin: 0; /* ✅ Quita el centrado si no lo quieres en desktop */
+    display: inline; /* Opcional, depende de tu layout */
+    max-height: 100%;
+  }
 }
 
 /* Información Costado */
@@ -118,8 +140,13 @@ const escape = (event) => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 400px;
   color: #fff;
+  text-align: center;
+  width: 100%;
+  @include r(lg) {
+    max-width: 400px;
+    text-align: left;
+  }
 }
 
 .fullscreen-text h2 {
@@ -155,10 +182,12 @@ const escape = (event) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom,
-        rgba(116, 116, 116, 0),
-        rgba(0, 0, 0, 0.8),
-        rgba(116, 116, 116, 0));
+    background: linear-gradient(
+      to bottom,
+      rgba(116, 116, 116, 0),
+      rgba(0, 0, 0, 0.8),
+      rgba(116, 116, 116, 0)
+    );
     opacity: 0;
     transition: 0.3s;
   }
@@ -182,7 +211,7 @@ const escape = (event) => {
 .close-button {
   position: absolute;
   top: 30px;
-  right: 100px;
+  right: 30px;
   background: transparent;
   border: none;
   border-radius: 1000px;
@@ -191,6 +220,10 @@ const escape = (event) => {
   color: #dfd2d2;
   z-index: 100;
   transition: 0.5s;
+
+  @include r(lg) {
+    right: 100px;
+  }
 
   &:hover {
     background: #dfd2d2;
