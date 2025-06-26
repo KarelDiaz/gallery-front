@@ -1,5 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
+import { onMounted, onUnmounted } from 'vue'
 
 import { usePicturesStore } from 'src/stores/pictures'
 
@@ -29,16 +30,36 @@ const close = () => {
   pictureIndex.value = null
 }
 
-const escape = (event) => {
-  if (event.key === 'Escape') {
-    close()
+const handleKeydown = (event) => {
+  switch (event.key) {
+    case 'Escape':
+      close()
+      break
+    case 'ArrowLeft':
+      previous()
+      event.preventDefault()
+      break
+    case 'ArrowRight':
+      next()
+      event.preventDefault()
+      break
   }
 }
+
+// Agregar el listener cuando el componente se monta
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown)
+})
+
+// Remover el listener cuando el componente se desmonta
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <!-- ImagenFullscreen.vue -->
 <template>
-  <div class="fullscreen-background" @click.self="close" @keypress="escape">
+  <div class="fullscreen-background" @click.self="close" tabindex="0">
     <div class="fullscreen-content">
       <!-- Información a un costado -->
       <div class="fullscreen-text">
@@ -50,8 +71,7 @@ const escape = (event) => {
       <img
         :src="url + currentPicture.attributes.picture.data.attributes.formats.large.url"
         :alt="currentPicture.attributes.nombre"
-        class="fullscreen-image"
-      />
+        class="fullscreen-image" />
 
       <!-- Botón cerrar -->
       <button class="close-button" @click="close"><q-icon name="close" /></button>
@@ -123,14 +143,19 @@ const escape = (event) => {
   max-height: calc(100vh - 210px);
   object-fit: contain;
   border-radius: 8px;
-  width: 90vw; /* Más ancho en móvil */
+  width: 90vw;
+  /* Más ancho en móvil */
   display: block;
-  margin: 0 auto; /* ✅ Esto la centra en móvil */
+  margin: 0 auto;
+  /* ✅ Esto la centra en móvil */
 
   @include r(lg) {
-    width: 50vw; /* ✅ Más pequeño en pantallas grandes */
-    margin: 0; /* ✅ Quita el centrado si no lo quieres en desktop */
-    display: inline; /* Opcional, depende de tu layout */
+    width: 50vw;
+    /* ✅ Más pequeño en pantallas grandes */
+    margin: 0;
+    /* ✅ Quita el centrado si no lo quieres en desktop */
+    display: inline;
+    /* Opcional, depende de tu layout */
     max-height: 100%;
   }
 }
@@ -143,6 +168,7 @@ const escape = (event) => {
   color: #fff;
   text-align: center;
   width: 100%;
+
   @include r(lg) {
     max-width: 400px;
     text-align: left;
@@ -182,12 +208,10 @@ const escape = (event) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      to bottom,
-      rgba(116, 116, 116, 0),
-      rgba(0, 0, 0, 0.8),
-      rgba(116, 116, 116, 0)
-    );
+    background: linear-gradient(to bottom,
+        rgba(116, 116, 116, 0),
+        rgba(0, 0, 0, 0.8),
+        rgba(116, 116, 116, 0));
     opacity: 0;
     transition: 0.3s;
   }
