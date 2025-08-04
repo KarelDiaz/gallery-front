@@ -1,26 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-
-import { usePicturesStore } from 'src/stores/pictures'
-import BoxItems from 'components/BoxItems.vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import BoxItems from 'components/BoxItems.vue'
+import { usePicturesStore } from 'src/stores/pictures'
 
 const picturesStore = usePicturesStore()
 const { pictureIndex } = storeToRefs(picturesStore)
 const space = ref(-5)
-const inScreen = ref(false)
 const img = ref(null)
-const animationName = ref('fade')
-
-const isElementInViewport = (el) => {
-  const rect = el.getBoundingClientRect()
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  )
-}
 
 const handlerShowFullscreen = () => {
   console.log('handlerShowFullscreen', prop.index);
@@ -46,34 +34,20 @@ const prop = defineProps({
   },
 })
 
-const asignRandomAnimation = () => {
-  const animations = ['fade', 'slide-bottom', 'slide-left', 'slide-right', 'fade-zoom']
-  animationName.value = animations[Math.floor(Math.random() * animations.length)]
-}
-
-onMounted(() => {
-  asignRandomAnimation()
-  window.addEventListener('scroll', () => {
-    if (!inScreen.value)
-      inScreen.value = isElementInViewport(img.value)
-  })
-})
 </script>
 
 <template>
   <div style="min-height: 300px;" ref="img">
-    <transition :name="animationName">
-      <div @mouseenter="space = -12" @mouseleave="space = -5" v-if="inScreen">
-        <div class="imagen-completa" @click="handlerShowFullscreen()">
-          <div class="img-container">
-            <BoxItems :space="space"></BoxItems>
-            <img :src="imagen" class="img" :alt="nombre" />
-          </div>
-          <div class="name">{{ nombre }}</div>
-          <div class="description">{{ descripcion }}</div>
+    <div @mouseenter="space = -12" @mouseleave="space = -5">
+      <div class="imagen-completa" @click="handlerShowFullscreen()">
+        <div class="img-container">
+          <BoxItems :space="space"></BoxItems>
+          <img :src="imagen" class="img" :alt="nombre" />
         </div>
+        <div class="name">{{ nombre }}</div>
+        <div class="description">{{ descripcion }}</div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
